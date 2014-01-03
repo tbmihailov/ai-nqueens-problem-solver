@@ -10,9 +10,14 @@ namespace AI.NQueensProblem
     {
         static void Main(string[] args)
         {
-            int n = 8;
+            int n = 16;
             Solver solver = new Solver(n);
             solver.Solve();
+
+            //var board = new Board(n);
+            //board.InitFigurePositions();
+            //Console.WriteLine(board);
+            //Console.WriteLine(string.Format("Collisions:{0}", board.CollisionsCnt));
         }
     }
 }
