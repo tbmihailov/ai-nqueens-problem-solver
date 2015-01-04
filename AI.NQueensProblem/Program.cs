@@ -11,13 +11,26 @@ namespace AI.NQueensProblem
         static void Main(string[] args)
         {
             int n = 16;
-            Solver solver = new Solver(n);
-            solver.Solve();
+            int maxSteps = 200;
+            int maxResets = 100;
 
-            //var board = new Board(n);
-            //board.InitFigurePositions();
-            //Console.WriteLine(board);
-            //Console.WriteLine(string.Format("Collisions:{0}", board.CollisionsCnt));
+            bool isSolutionFound = false;
+            int resetsCount = 0;
+            while ((!isSolutionFound) && (resetsCount < maxResets))
+            {
+                Solver solver = new Solver(n);
+                isSolutionFound = solver.Solve(n, maxSteps);
+                resetsCount++;
+            }
+
+            if (isSolutionFound)
+            {
+                Console.WriteLine("Success in {0} resets!", resetsCount);
+            }
+            else
+            {
+                Console.WriteLine("Failed to find solution in {0} resets!", resetsCount);
+            }
         }
     }
 }

@@ -11,6 +11,12 @@ namespace AI.NQueensProblem
 
         HashSet<Figure> _figures;
 
+        public HashSet<Figure> Figures
+        {
+            get { return _figures; }
+            set { _figures = value; }
+        }
+
 
         public Board(int boardSize)
         {

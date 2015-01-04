@@ -22,7 +22,7 @@ namespace AI.NQueensProblem
             get { return _stepsLog; }
         }
 
-        public void Solve(int boardSize)
+        public bool Solve(int boardSize, int maxSteps)
         {
             Board board = new Board(boardSize);
             board.InitFigurePositions();
@@ -32,9 +32,29 @@ namespace AI.NQueensProblem
 
             int stepCount = 0;
             int queenIndex = 0;
+            Random random = new Random();
             while (board.CollisionsCnt > 0)
             {
-                Figure queen = board.Collisions.Select(kv=>kv.Key).ToArray()[queenIndex];
+                if (stepCount > maxSteps)
+                {
+                    Console.WriteLine("Solution has not been found in {0} steps :(", maxSteps);
+                    return false;
+                }
+                Figure queen = null;
+                var collisionsArray = board.Collisions.OrderByDescending(kv=>kv.Value).Select(kv=>kv.Key).ToArray();
+                if (queenIndex >= collisionsArray.Length)
+                {
+                    var allFigures = board.Figures.ToArray();
+                    int randomQueen = random.Next(allFigures.Length - 1);
+                    queen = allFigures[randomQueen];
+                    
+                    int randomColumn = random.Next(boardSize-1);
+                    board.TryMove(queen, queen.Row, randomColumn);
+                    queenIndex = 0;
+                    stepCount++;
+                    continue;
+                }
+                queen = collisionsArray[queenIndex];
 
                 int previousRow = queen.Row;
                 int previousColumn = queen.Column;
@@ -75,6 +95,7 @@ namespace AI.NQueensProblem
 
             Console.WriteLine("=========================");
             Console.WriteLine("Solution in {0} steps", stepCount);
+            return true;
         }
 
         private void AddStepLog(int stepNumber,int queenId, int fromRow, int fromColumn, int toRow, int toColumn, Board board)
@@ -87,9 +108,6 @@ namespace AI.NQueensProblem
             Console.WriteLine("Collisions {0}", board.CollisionsCnt);
         }
 
-        internal void Solve()
-        {
-            Solve(_size);
-        }
+        
     }
 }
